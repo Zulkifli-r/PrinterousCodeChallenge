@@ -9,7 +9,8 @@
 
         <!-- Fonts -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
-
+        <!-- Remix icon -->
+        <link href="https://cdn.jsdelivr.net/npm/remixicon@2.2.0/fonts/remixicon.min.css" rel="stylesheet">
         <!-- Styles -->
         <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 
@@ -32,5 +33,12 @@
                 {{ $slot }}
             </main>
         </div>
+        <script>
+            document.addEventListener("DOMContentLoaded", function(event) { 
+                let alertBox = document.getElementsByClassName('alert')[0];
+                console.log(alertBox);
+                setTimeout(function(){ alertBox.style.display = 'none'; }, 5000);
+            });
+        </script>
     </body>
 </html>
