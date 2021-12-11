@@ -36,6 +36,15 @@
               </div>
               <div class="flex justify-between">
                 <a href="{{ route('organization.edit', $organization) }}" class="text-yellow-400 font-semibold mt-4 py-2 px-4 hover:border-transparent "><i class="ri-edit-line text-lg"></i></a>
+                @if (!$organization->user)
+                  <a title="Assign account manager" href="{{ route('organization.account-manager.create', $organization) }}" class="text-green-400 font-semibold mt-4 py-2 px-4 hover:border-transparent "><i class="ri-user-add-line text-lg"></i></a>
+                @else
+                  <form action="{{ route('organization.account-manager.delete', $organization) }}" method="post">
+                    @csrf
+                    @method('delete')
+                    <button title="Unassign {{ $organization->user->name }} as account manager" type="submit" class="text-red-400 font-semibold mt-4 py-2 px-4 hover:border-transparent "><i class="ri-user-unfollow-line text-lg"></i></button> 
+                  </form>
+                @endif
                 <form id="delete-organization" action="{{ route('organization.delete', $organization) }}" method="post">
                   @csrf
                   @method('delete')

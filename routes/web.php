@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AccountManagerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\PeopleController;
@@ -37,6 +38,12 @@ Route::group(['middleware' => 'auth'], function(){
             Route::post('/store', [PeopleController::class, 'store'])->name('store');
             Route::put('/update/{person}', [PeopleController::class, 'update'])->name('update');
             Route::delete('{person}',[PeopleController::class, 'destroy'])->name('delete');
+        });
+
+        Route::group(['prefix' => '{organization}/account-manager', 'as' => 'account-manager.'], function(){
+            Route::get('/create', [AccountManagerController::class, 'create'])->name('create');
+            Route::post('/store/{user}', [AccountManagerController::class, 'store'])->name('store');
+            Route::delete('/',[AccountManagerController::class, 'destroy'])->name('delete');
         });
     });
 });
