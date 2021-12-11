@@ -17,9 +17,11 @@
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('organization.create')" :active="request()->routeIs('organization.create','organization.edit')">
-                        {{ __('Create Organization') }}
-                    </x-nav-link>
+                    @can('create', \App\Models\Organization::class)
+                        <x-nav-link :href="route('organization.create')" :active="request()->routeIs('organization.create','organization.edit')">
+                            {{ __('Create Organization') }}
+                        </x-nav-link>
+                    @endcan
                 </div>
             </div>
 
@@ -71,9 +73,11 @@
             <x-responsive-nav-link :href="route('home')" :active="request()->routeIs('home')">
                 {{ __('Home') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('organization.create')" :active="request()->routeIs('organization.create','organization.edit')">
-                {{ __('Create Organization') }}
-            </x-responsive-nav-link>
+            @can('create', \App\Models\Organization::class)
+                <x-responsive-nav-link :href="route('organization.create')" :active="request()->routeIs('organization.create','organization.edit')">
+                    {{ __('Create Organization') }}
+                </x-responsive-nav-link>
+            @endcan
         </div>
 
         <!-- Responsive Settings Options -->

@@ -35,21 +35,27 @@
                 <span class="ml-1">{{ $organization->website }}</span>
               </div>
               <div class="flex justify-between">
-                <a href="{{ route('organization.edit', $organization) }}" class="text-yellow-400 font-semibold mt-4 py-2 px-4 hover:border-transparent "><i class="ri-edit-line text-lg"></i></a>
-                @if (!$organization->user)
-                  <a title="Assign account manager" href="{{ route('organization.account-manager.create', $organization) }}" class="text-green-400 font-semibold mt-4 py-2 px-4 hover:border-transparent "><i class="ri-user-add-line text-lg"></i></a>
-                @else
-                  <form action="{{ route('organization.account-manager.delete', $organization) }}" method="post">
+                @can('update', $organization)
+                  <a href="{{ route('organization.edit', $organization) }}" class="text-yellow-400 font-semibold mt-4 py-2 px-4 hover:border-transparent "><i class="ri-edit-line text-lg"></i></a>
+                @endcan
+                @can('account-manager')
+                  @if (!$organization->user)
+                    <a title="Assign account manager" href="{{ route('organization.account-manager.create', $organization) }}" class="text-green-400 font-semibold mt-4 py-2 px-4 hover:border-transparent "><i class="ri-user-add-line text-lg"></i></a>
+                  @else
+                    <form action="{{ route('organization.account-manager.delete', $organization) }}" method="post">
+                      @csrf
+                      @method('delete')
+                      <button title="Unassign {{ $organization->user->name }} as account manager" type="submit" class="text-red-400 font-semibold mt-4 py-2 px-4 hover:border-transparent "><i class="ri-user-unfollow-line text-lg"></i></button> 
+                    </form>
+                  @endif
+                @endcan
+                @can('delete', \App\Models\Organization::class)
+                  <form id="delete-organization" action="{{ route('organization.delete', $organization) }}" method="post">
                     @csrf
                     @method('delete')
-                    <button title="Unassign {{ $organization->user->name }} as account manager" type="submit" class="text-red-400 font-semibold mt-4 py-2 px-4 hover:border-transparent "><i class="ri-user-unfollow-line text-lg"></i></button> 
+                    <button type="submit" class="text-red-400 font-semibold mt-4 py-2 px-4 hover:border-transparent "><i class="ri-delete-bin-line text-lg"></i></button> 
                   </form>
-                @endif
-                <form id="delete-organization" action="{{ route('organization.delete', $organization) }}" method="post">
-                  @csrf
-                  @method('delete')
-                  <button type="submit" class="text-red-400 font-semibold mt-4 py-2 px-4 hover:border-transparent "><i class="ri-delete-bin-line text-lg"></i></button> 
-                </form>
+                @endcan
               </div>
             </div>
           </div>
@@ -58,7 +64,9 @@
             <div class="bg-transparent rounded overflow-hidden p-8">
               <div class="flex justify-between">
                   <p class="font-bold text-lg">PIC</p>
-                  <a href="{{ route('organization.people.create', $organization) }}" class="bg-green-400 rounded text-white px-2 hover:bg-green-600">+</a>
+                  @can('people-manage', $organization)
+                    <a href="{{ route('organization.people.create', $organization) }}" class="bg-green-400 rounded text-white px-2 hover:bg-green-600">+</a>
+                  @endcan
               </div>
               <table class="min-w-full leading-normal">
                   <thead>
@@ -111,13 +119,17 @@
                       <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                           {{ $person->email }}
                         </td>
-                      <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm text-center flex justify-between">
+                      <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm text-center ">
+                        @can('people-manage', $organization)
+                        <div class="flex justify-between">
                           <a href="{{ route('organization.people.edit', [$organization, $person]) }}" class="font-bold py-2 px-4 mr-1 text-yellow-400"><i class="ri-edit-line"></i></a>
                           <form method="POST" action="{{ route('organization.people.delete', [$organization, $person]) }}">
                             @csrf
                             @method('delete')
                             <button type="submit" class="font-bold py-2 px-4 -mr-1 text-red-400"><i class="ri-delete-bin-line"></i></button>
                           </form>
+                        </div>
+                        @endcan
                       </td>
                     </tr>
                     @endforeach
