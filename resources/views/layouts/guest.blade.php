@@ -21,4 +21,11 @@
             {{ $slot }}
         </div>
     </body>
+    <script>
+        document.addEventListener("DOMContentLoaded", function(event) { 
+                let alertBox = document.getElementsByClassName('alert')[0];
+                console.log(alertBox);
+                setTimeout(function(){ alertBox.style.display = 'none'; }, 5000);
+            });
+    </script>
 </html>
