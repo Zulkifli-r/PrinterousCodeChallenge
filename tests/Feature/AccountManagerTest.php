@@ -12,19 +12,19 @@ class AccountManagerTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_assign_account_manager_page_is_rendered()
+    public function test_assign_account_manager_page_is_restricted_to_admin()
     {
         $user = User::factory()->create();
         $response = $this->actingAs($user);
         $organization = Organization::factory()->create();
         $response = $this->get('organization/'.$organization->id.'/account-manager/create');
         
-        $response->assertStatus(200);
+        $response->assertStatus(403);
     }
 
     public function test_user_can_be_assigned_to_an_organiztion()
-    {
-        $user = User::factory()->create();
+    {   
+        $user = User::factory()->create(['is_admin' => true]);
         $user2 = User::factory()->create();
         $response = $this->actingAs($user);
         $organization = Organization::factory()->create();
@@ -36,7 +36,7 @@ class AccountManagerTest extends TestCase
 
     public function test_user_can_be_unassigned_from_an_organiztion()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create(['is_admin' => true]);
         $user2 = User::factory()->create();
         $response = $this->actingAs($user);
         $organization = Organization::factory()->create();
