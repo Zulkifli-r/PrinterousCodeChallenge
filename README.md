@@ -5,6 +5,8 @@
 git clone git@github.com:Zulkifli-r/PrinterousCodeChallenge.git
 cd PrinterousCodeChallenge
 composer install
+cp .env.example .env
+php artisan key:generate
 ```
 update `.env` file according to your environment, then run :
 ```sh
