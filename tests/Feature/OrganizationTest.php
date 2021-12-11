@@ -43,6 +43,8 @@ class OrganizationTest extends TestCase
             'website' => 'https://printerous.com'
         ]);
 
+        $organization = Organization::first();
+        $this->assertEquals('Organization 1', $organization->name);
         $response->assertRedirect(route('home'));
     }
 
@@ -69,7 +71,21 @@ class OrganizationTest extends TestCase
             'phone' => '+6281242200988',
             'website' => 'https://printerous2.com'
         ]);
+        $organization = $organization->refresh();
 
+        $this->assertEquals('Organization 2', $organization->name);
         $response->assertRedirect(route('organization.show', $organization));
+    }
+
+    public function test_organization_can_be_deleted()
+    {
+        $user = User::factory()->create();
+        $response = $this->actingAs($user);
+        
+        $organization = Organization::factory()->create();
+        $response = $this->delete('organization/'.$organization->id);
+
+        $this->assertNull(Organization::whereId($organization->id)->first());
+        $response->assertRedirect(route('home'));
     }
 }
