@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -44,9 +45,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function organization(): BelongsTo
+    public function organization(): HasOne
     {
-        return $this->belongsTo(Organization::class);
+        return $this->hasOne(Organization::class);
     }
 
     public function scopeIsAdmin($query, $value = true)
