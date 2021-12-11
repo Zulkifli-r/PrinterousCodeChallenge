@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\OrganizationController;
+use App\Http\Controllers\PeopleController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -29,6 +30,14 @@ Route::group(['middleware' => 'auth'], function(){
         Route::get('/edit/{organization}', [OrganizationController::class, 'edit'])->name('edit');
         Route::put('/update/{organization}', [OrganizationController::class, 'update'])->name('update');
         Route::delete('{organization}',[OrganizationController::class, 'destroy'])->name('delete');
+        
+        Route::group(['prefix' => '{organization}/people', 'as' => 'people.' ], function(){
+            Route::get('/create', [PeopleController::class, 'create'])->name('create');
+            Route::get('/edit/{person}', [PeopleController::class, 'edit'])->name('edit');
+            Route::post('/store', [PeopleController::class, 'store'])->name('store');
+            Route::put('/update/{person}', [PeopleController::class, 'update'])->name('update');
+            Route::delete('{person}',[PeopleController::class, 'destroy'])->name('delete');
+        });
     });
 });
 

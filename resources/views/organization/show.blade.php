@@ -46,7 +46,75 @@
           </div>
           {{-- PIC --}}
           <div class="w-full lg:w-8/12 py-6">
-            
+            <div class="bg-transparent rounded overflow-hidden p-8">
+              <div class="flex justify-between">
+                  <p class="font-bold text-lg">PIC</p>
+                  <a href="{{ route('organization.people.create', $organization) }}" class="bg-green-400 rounded text-white px-2 hover:bg-green-600">+</a>
+              </div>
+              <table class="min-w-full leading-normal">
+                  <thead>
+                    <tr>
+                      <th
+                        class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"
+                      >
+                        Name
+                      </th>
+                      <th
+                        class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"
+                      >
+                        Phone
+                      </th>
+                      <th
+                        class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"
+                      >
+                        Email
+                      </th>
+                      <th
+                        class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100"
+                      >
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @foreach ($organization->people as $person)
+                    <tr>
+                      <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                        <div class="flex">
+                          <div class="flex-shrink-0 w-10 h-10">
+                            @if ($person->getFirstMedia('avatar'))
+                              <img
+                                class="w-full h-full rounded-full"
+                                src="{{ asset($person->getFirstMedia('avatar')->getUrl()) }}"
+                                alt=""
+                              />
+                            @endif
+                          </div>
+                          <div class="ml-3 pt-3">
+                            <p class="text-gray-900 whitespace-no-wrap">
+                              {{ $person->name }}
+                            </p>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                        {{ $person->phone }}
+                      </td>
+                      <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                          {{ $person->email }}
+                        </td>
+                      <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm text-center flex justify-between">
+                          <a href="{{ route('organization.people.edit', [$organization, $person]) }}" class="font-bold py-2 px-4 mr-1 text-yellow-400"><i class="ri-edit-line"></i></a>
+                          <form method="POST" action="{{ route('organization.people.delete', [$organization, $person]) }}">
+                            @csrf
+                            @method('delete')
+                            <button type="submit" class="font-bold py-2 px-4 -mr-1 text-red-400"><i class="ri-delete-bin-line"></i></button>
+                          </form>
+                      </td>
+                    </tr>
+                    @endforeach
+                  </tbody>
+                </table>
+            </div>
           </div>
         </div>
       </div>
